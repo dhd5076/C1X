@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using C1X.Game;
+using System;
 
 namespace C1X
 {
-    /// <summary>
-    /// Game singleton class
-    /// </summary>
     public class C1XGame : Microsoft.Xna.Framework.Game
     {
         public static C1XGame Instance { get; private set; }
@@ -19,9 +17,6 @@ namespace C1X
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        /// <summary>
-        /// Game singleton contructor
-        /// </summary>
         public C1XGame()
         {
             Instance = this;
@@ -32,19 +27,22 @@ namespace C1X
             graphics.PreferredBackBufferHeight = 600;
         }
 
-        /// <summary>
-        /// Loads assets
-        /// </summary>
+        protected override void Initialize()
+        {
+            NodeList = new List<Enemy>();
+
+            base.Initialize();
+        }
+
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            Texture2D texture = Content.Load<Texture2D>("Sprites/Player");
+            Vector2 position = new Vector2(0, 0);
+            Enemy test = new Enemy(texture, position);
+            NodeList.Add(test);
         }
 
-        /// <summary>
-        /// Top update call, Updates all gameobjects and systems for the next draw call
-        /// </summary>
-        /// <param name="gameTime">Time elapsed since last update</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -55,15 +53,17 @@ namespace C1X
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// Top draw call, Draws all gameobjects
-        /// </summary>
-        /// <param name="gameTime">Time elapsed since last update</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            foreach(Node node in NodeList)
+            {
+                Console.Write(node);
+                spriteBatch.Draw(node.Texture2D, node.Position, Color.White);
+            }
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

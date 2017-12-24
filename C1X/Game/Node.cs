@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace C1X.Game
 {
-    abstract class Node
+    public abstract class Node
     {
-        public Sprite Sprite { get; set;  }
-        public CircleCollider CircleCollider { get; set; }
+        public Texture2D Texture2D{ get; set;  }
 
         public abstract void Update();
     

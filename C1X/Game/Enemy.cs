@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace C1X.Game
 {
-    class Enemy : Node
+    public class Enemy : Node
     {
         public override void Update()
         {

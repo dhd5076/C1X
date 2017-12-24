@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace C1X.Game
 {
-    class Crypto
+    public class Crypto
     {
-        public static void 
+        public static void Hash()
+        {
+
+        }
     }
 }

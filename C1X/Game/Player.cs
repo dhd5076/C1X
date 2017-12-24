@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace C1X.Game
 {
-    class Player : Node
+    public class Player : Node
     {
         public override void Update()
         {

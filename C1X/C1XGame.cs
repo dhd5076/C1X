@@ -1,54 +1,64 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
+using C1X.Game;
 
 namespace C1X
 {
     /// <summary>
-    /// This is the main type for your game.
+    /// Game singleton class
     /// </summary>
     public class C1XGame : Microsoft.Xna.Framework.Game
     {
         public static C1XGame Instance { get; private set; }
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static GameTime GameTime { get; private set; }
-        public static 
+        public static List<Enemy> NodeList;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        /// <summary>
+        /// Game singleton contructor
+        /// </summary>
         public C1XGame()
         {
+            Instance = this;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
         }
 
-        protected override void Initialize()
-        {
-
-            base.Initialize();
-        }
-
+        /// <summary>
+        /// Loads assets
+        /// </summary>
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
         }
 
-        protected override void UnloadContent()
-        {
-
-        }
-
+        /// <summary>
+        /// Top update call, Updates all gameobjects and systems for the next draw call
+        /// </summary>
+        /// <param name="gameTime">Time elapsed since last update</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
-            // TODO: Add your update logic here
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Top draw call, Draws all gameobjects
+        /// </summary>
+        /// <param name="gameTime">Time elapsed since last update</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);

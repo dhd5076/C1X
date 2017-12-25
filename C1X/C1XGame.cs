@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using C1X.Game;
 using System;
+using C1X.Network;
 
 namespace C1X
 {
@@ -12,7 +13,10 @@ namespace C1X
         public static C1XGame Instance { get; private set; }
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static GameTime GameTime { get; private set; }
-        public static List<Enemy> NodeList;
+        public static List<Node> NodeList { get; private set; }
+        public static PeerNetwork PeerNetwork { get; private set; }
+
+        public Player Player { get; private set; }
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -29,7 +33,8 @@ namespace C1X
 
         protected override void Initialize()
         {
-            NodeList = new List<Enemy>();
+            NodeList = new List<Node>();
+            PeerNetwork = new PeerNetwork();
 
             base.Initialize();
         }
@@ -37,10 +42,15 @@ namespace C1X
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Texture2D texture = Content.Load<Texture2D>("Sprites/Player");
-            Vector2 position = new Vector2(0, 0);
-            Enemy test = new Enemy(texture, position);
-            NodeList.Add(test);
+            Player = new Player(Content.Load<Texture2D>("Sprites/Player"), new Vector2(0, 0));
+            NodeList.Add(Player);
+
+            //This is just for debugging
+            for(int i = 0; i < 100; i++)
+            {
+                Random random = new Random();
+                NodeList.Add(new Player(Content.Load<Texture2D>("Sprites/Player"), new Vector2(0, 0)));
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -48,6 +58,11 @@ namespace C1X
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
+            }
+
+            foreach(Node node in NodeList)
+            {
+                node.Update(gameTime);
             }
 
             base.Update(gameTime);

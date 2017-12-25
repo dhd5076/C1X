@@ -14,7 +14,7 @@ namespace C1X.Game
         public Enemy() : base() { }
         public Enemy(Texture2D texture2D, Vector2 position) : base(texture2D, position) { }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             throw new NotImplementedException();
         }

@@ -8,13 +8,22 @@ using System.Threading.Tasks;
 
 namespace C1X.Network
 {
-    class Peer
+    public class Peer
     {
-        public TcpClient TcpClient;
+        public TcpClient TcpClient { get; private set; }
+        public IPAddress IPAddress { get; private set; }
+        public NetworkStream NetworkStream { get; private set; } 
 
         public Peer(TcpClient tcpClient)
         {
             this.TcpClient = tcpClient;
+            this.NetworkStream = tcpClient.GetStream();
+            this.IPAddress = IPAddress.Parse(((IPEndPoint)TcpClient.Client.RemoteEndPoint).Address.ToString());
+        }
+
+        public void Send(string message)
+        {
+            //NetworkStream.Read(,);
         }
     }
 }

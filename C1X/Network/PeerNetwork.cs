@@ -28,9 +28,17 @@ namespace C1X.Network
         {
             while (true)
             {
-                TcpClient tcpClient = TcpListener.AcceptTcpClient();
+                var tcpClient = TcpListener.AcceptTcpClient();
                 Console.WriteLine("Client Connected!");
                 ConnectedPeers.Add(new Peer(tcpClient));
+            }
+        }
+
+        public void Broadcast(string message)
+        {
+            foreach (Peer peer in ConnectedPeers)
+            {
+                peer.Send(message);
             }
         }
     }

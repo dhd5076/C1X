@@ -1,0 +1,12 @@
+﻿Public_Key : ENCRYPTED[Command,Address]  
+
+//Comming online
+192 To All: My public_key is 192
+
+//Killing
+194 To All: Killed 129 with key 365
+{365 Kills 129} == True
+All To ALl: 192 Killed 129 with key 365
+
+
+Hash(My_Public_Key, Their_Public_Key) = [0000]149586

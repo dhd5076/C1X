@@ -21,17 +21,17 @@ namespace C1X.Game
             KeyboardState keyboardState = Keyboard.GetState();
 
             #region Move with input
-            bool Up = keyboardState.IsKeyDown(Keys.W);
-            bool Down = keyboardState.IsKeyDown(Keys.S);
-            bool Left = keyboardState.IsKeyDown(Keys.A);
-            bool Right = keyboardState.IsKeyDown(Keys.D);
+            var up = keyboardState.IsKeyDown(Keys.W);
+            var down = keyboardState.IsKeyDown(Keys.S);
+            var left = keyboardState.IsKeyDown(Keys.A);
+            var right = keyboardState.IsKeyDown(Keys.D);
 
-            if (Up && !Down && this.Velocity.Y > -Speed) this.Velocity += new Vector2(0, -20);
-            else if (Down && !Up && this.Velocity.Y < Speed) this.Velocity += new Vector2(0, 20);
+            if (up && !down && this.Velocity.Y > -Speed) this.Velocity += new Vector2(0, -20);
+            else if (down && !up && this.Velocity.Y < Speed) this.Velocity += new Vector2(0, 20);
 
 
-            if (Left && !Right && this.Velocity.X > -Speed) this.Velocity += new Vector2(-20, 0);
-            else if (Right && !Left && this.Velocity.X < Speed) this.Velocity += new Vector2(20, 0);
+            if (left && !right && this.Velocity.X > -Speed) this.Velocity += new Vector2(-20, 0);
+            else if (right && !left && this.Velocity.X < Speed) this.Velocity += new Vector2(20, 0);
             #endregion
 
             base.Update(gameTime);

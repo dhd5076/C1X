@@ -57,7 +57,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="C1XGame.cs" />
-    <Compile Include="Game\Enemy.cs" />
     <Compile Include="Game\Node.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Network\Peer.cs" />
@@ -75,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ChainDemo.txt" />
     <Content Include="Content\KnownPeers.lst" />
     <Content Include="Icon.ico" />
   </ItemGroup>

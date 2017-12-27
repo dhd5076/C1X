@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace C1X.Game
 {
-    public abstract class Node
+    public class Node
     {
         public static readonly float Friction = 10f;
 

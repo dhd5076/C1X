@@ -10,19 +10,26 @@ using C1X.Network;
 
 namespace C1X.Utils
 {
-    class FileIO
+    internal class FileIO
     {
-        private static string PeerListFile = "/Content/KnownPeers.lst";
+        private const string PeerListFile = "/Content/KnownPeers.lst";
 
         public static void LoadPeerList()
         {
             try
             {
-                using (StreamReader StreamReader = new StreamReader(PeerListFile))
+                using (var streamReader = new StreamReader(PeerListFile))
                 {
-                    while(StreamReader.Peek() >= 0)
+                    while(streamReader.Peek() >= 0)
                     {
-                        string[] peerData = StreamReader.ReadLine().Split(':');
+                        try
+                        {
+                            var peerData = streamReader.ReadLine()?.Split(':');
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Failed to read data from player", e);
+                        }
                     }
                 }
 
@@ -37,9 +44,9 @@ namespace C1X.Utils
         {
             try
             {
-                using (StreamWriter StreamWriter = new StreamWriter(PeerListFile))
+                using (var streamWriter = new StreamWriter(PeerListFile))
                 {
-                    foreach(Peer peer in C1XGame.PeerNetwork.ConnectedPeers)
+                    foreach(var peer in C1XGame.PeerNetwork.ConnectedPeers)
                     {
                         //StreamWriter.WriteLine(peer.TcpClient.);
                     }

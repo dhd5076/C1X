@@ -18,13 +18,15 @@ namespace C1X.Game
 
         public override void Update(GameTime gameTime)
         {
-            KeyboardState keyboardState = Keyboard.GetState();
+            var keyboardState = Keyboard.GetState();
 
             #region Move with input
             var up = keyboardState.IsKeyDown(Keys.W);
             var down = keyboardState.IsKeyDown(Keys.S);
             var left = keyboardState.IsKeyDown(Keys.A);
             var right = keyboardState.IsKeyDown(Keys.D);
+
+            if(up && down) C1XGame.PeerNetwork.Broadcast("Bit");
 
             if (up && !down && this.Velocity.Y > -Speed) this.Velocity += new Vector2(0, -20);
             else if (down && !up && this.Velocity.Y < Speed) this.Velocity += new Vector2(0, 20);

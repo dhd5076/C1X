@@ -20,7 +20,7 @@ namespace C1X.Network
             ConnectedPeers = new List<Peer>();
             TcpListener.Start();
 
-            Thread connectionHandlerThread = new Thread(IncomingConnectionHandler);
+            var connectionHandlerThread = new Thread(IncomingConnectionHandler);
             connectionHandlerThread.Start();
         }
 
@@ -36,7 +36,7 @@ namespace C1X.Network
 
         public void Broadcast(string message)
         {
-            foreach (Peer peer in ConnectedPeers)
+            foreach (var peer in ConnectedPeers)
             {
                 peer.Send(message);
             }

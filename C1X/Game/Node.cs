@@ -12,13 +12,14 @@ namespace C1X.Game
         public Texture2D Texture2D { get; private set; }
         public Vector2 Position { get; protected set; }
         public Vector2 Velocity {get; protected set;}
-    
-        private Guid GUID { get; }
+
+        private string _privateKey;
+        private string _publicKey;
         
 
         public Node()
         {
-            this.GUID = genGuid();
+            //TODO:Get keys from crypto functions
         }
 
         public Node(Texture2D texture2D, Vector2 position)
@@ -41,17 +42,9 @@ namespace C1X.Game
             this.Velocity += forceVector;
         }
 
-        private Guid genGuid()
+        private static Guid GenGuid()
         {
             return Guid.NewGuid();
-        }
-
-        protected enum Direction
-        {
-            FORWARD,
-            BACK,
-            RIGHT,
-            LEFT
         }
     }
 }

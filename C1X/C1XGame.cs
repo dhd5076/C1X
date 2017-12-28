@@ -11,24 +11,24 @@ namespace C1X
     public class C1XGame : Microsoft.Xna.Framework.Game
     {
         public static C1XGame Instance { get; private set; }
-        public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
-        public static GameTime GameTime { get; private set; }
+        public static Viewport Viewport => Instance.GraphicsDevice.Viewport;
+        public static GameTime GameTime;
         public static List<Node> NodeList { get; private set; }
         public static PeerNetwork PeerNetwork { get; private set; }
 
         public Player Player { get; private set; }
 
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
 
         public C1XGame()
         {
             Instance = this;
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 600;
         }
 
         protected override void Initialize()
@@ -41,14 +41,14 @@ namespace C1X
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             Player = new Player(Content.Load<Texture2D>("Sprites/Player"), new Vector2(0, 0));
             NodeList.Add(Player);
 
             //This is just for debugging
-            for(int i = 0; i < 100; i++)
+            for(var i = 0; i < 100; i++)
             {
-                Random random = new Random();
+                var random = new Random();
                 NodeList.Add(new Player(Content.Load<Texture2D>("Sprites/Player"), new Vector2(0, 0)));
             }
         }
@@ -60,7 +60,7 @@ namespace C1X
                 Exit();
             }
 
-            foreach(Node node in NodeList)
+            foreach(var node in NodeList)
             {
                 node.Update(gameTime);
             }
@@ -72,13 +72,13 @@ namespace C1X
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
-            foreach(Node node in NodeList)
+            _spriteBatch.Begin();
+            foreach(var node in NodeList)
             {
                 Console.Write(node);
-                spriteBatch.Draw(node.Texture2D, node.Position, Color.White);
+                _spriteBatch.Draw(node.Texture2D, node.Position, Color.White);
             }
-            spriteBatch.End();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

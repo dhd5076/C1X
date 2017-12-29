@@ -49,7 +49,7 @@ namespace C1X.Network
         {
             if (TcpClient.Connected)
             {
-                StreamWriter.
+                StreamReader.Read();
             }
         }
 

@@ -19,7 +19,7 @@ namespace C1X.Game
 
         public Node()
         {
-            //TODO:Get keys from crypto functions
+            _privateKey = Crypto.Aes256.GenKeyPair();
         }
 
         public Node(Texture2D texture2D, Vector2 position)

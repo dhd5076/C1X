@@ -7,29 +7,25 @@ using System.Threading.Tasks;
 
 namespace C1X.Crypto
 {
-    public class Aes256
+    public class ECDsa
     {
-        public static RSACryptoServiceProvider RsaCryptoServiceProvider;
+        public static ECDsaCng EcDsa;
 
         public static void Init()
         {
-            RsaCryptoServiceProvider = new RSACryptoServiceProvider(256);
+            EcDsa = new ECDsaCng();
+            EcDsa.HashAlgorithm = CngAlgorithm.Sha256;
         }
 
-        public static string GenKeyPair()
+        public static ECDsaCng GenKeyPair()
         {
 
-                return RsaCryptoServiceProvider.ToXmlString(true);
+            return EcDsa;
         }
 
-        public static string Encrypt(byte[] data, string keyPair)
+        public static string Sign(string message, ECDsaCng Ec)
         {
-            return Encoding.UTF8.GetString(RsaCryptoServiceProvider.Encrypt(data, false));
-        }
-
-        public static string Decrypt(byte[] data, string keyPair)
-        {
-            return Encoding.UTF8.GetString(RsaCryptoServiceProvider.Decrypt(data, false));
+            return 
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using C1X.Game;
 using System;
+using System.Net.Sockets;
 
 namespace C1X
 {
@@ -40,17 +41,17 @@ namespace C1X
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Player = new Player(Content.Load<Texture2D>("Sprites/Player"), new Vector2(0, 0));
+            Player = new Player(new TcpClient().Client);
 
-            //Load known peers
+            Node.Texture2D = Content.Load<Texture2D>("Sprites/Player");
+
             Utils.LoadPeerList();
             NodeList.Add(Player);
-
-            //This is just for debugging
+            
             for(var i = 0; i < 100; i++)
             {
                 var random = new Random();
-                NodeList.Add(new Player(Content.Load<Texture2D>("Sprites/Player"), new Vector2(0, 0)));
+                NodeList.Add(Player);
             }
         }
 
@@ -77,7 +78,7 @@ namespace C1X
             foreach(var node in NodeList)
             {
                 Console.Write(node);
-                _spriteBatch.Draw(node.Texture2D, node.Position, Color.White);
+                _spriteBatch.Draw(Node.Texture2D, node.Position, Color.White);
             }
             _spriteBatch.End();
 

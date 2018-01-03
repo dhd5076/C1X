@@ -12,10 +12,10 @@ namespace C1X.Game
 {
     public class Player : Node
     {
-        public static readonly float Speed = 200f;
+        public static readonly float Speed = 2f;
+        public static readonly float Acceleration = 0.02f;
 
-        public Player() : base(new TcpClient()) { }
-        public Player(Texture2D texture2D, Vector2 position) : base(texture2D, position) { }
+        public Player(Socket socket) : base(socket, true) { }
 
         public override void Update(GameTime gameTime)
         {
@@ -29,12 +29,12 @@ namespace C1X.Game
 
             if(up && down) C1XGame.NodeNetwork.Broadcast("Bit");
 
-            if (up && !down && this.Velocity.Y > -Speed) this.Velocity += new Vector2(0, -20);
-            else if (down && !up && this.Velocity.Y < Speed) this.Velocity += new Vector2(0, 20);
+            if (up && !down && this.Velocity.Y > -Speed) this.Velocity += new Vector2(0, -Acceleration);
+            else if (down && !up && this.Velocity.Y < Speed) this.Velocity += new Vector2(0, Acceleration);
 
 
-            if (left && !right && this.Velocity.X > -Speed) this.Velocity += new Vector2(-20, 0);
-            else if (right && !left && this.Velocity.X < Speed) this.Velocity += new Vector2(20, 0);
+            if (left && !right && this.Velocity.X > -Speed) this.Velocity += new Vector2(-Acceleration, 0f);
+            else if (right && !left && this.Velocity.X < Speed) this.Velocity += new Vector2(Acceleration, 0f);
             #endregion
 
             base.Update(gameTime);

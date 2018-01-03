@@ -31,7 +31,7 @@ namespace C1X.Game
             {
                 var tcpClient = TcpListener.AcceptTcpClient();
                 Console.WriteLine("Client Connected!");
-                ConnectedPeers.Add(new Node(tcpClient));
+                ConnectedPeers.Add(new Node(tcpClient.Client, false));
             }
         }
 

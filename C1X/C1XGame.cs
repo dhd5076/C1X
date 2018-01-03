@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using C1X.Game;
 using System;
-using C1X.Network;
 
 namespace C1X
 {
@@ -14,27 +13,26 @@ namespace C1X
         public static Viewport Viewport => Instance.GraphicsDevice.Viewport;
         public static GameTime GameTime;
         public static List<Node> NodeList { get; private set; }
-        public static PeerNetwork PeerNetwork { get; private set; }
+        public static NodeNetwork NodeNetwork { get; private set; }
 
         public Player Player { get; private set; }
 
-        private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         public C1XGame()
         {
             Instance = this;
-            _graphics = new GraphicsDeviceManager(this);
+            var graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
         }
 
         protected override void Initialize()
         {
             NodeList = new List<Node>();
-            PeerNetwork = new PeerNetwork();
+            NodeNetwork = new NodeNetwork();
 
             base.Initialize();
         }
@@ -43,6 +41,9 @@ namespace C1X
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Player = new Player(Content.Load<Texture2D>("Sprites/Player"), new Vector2(0, 0));
+
+            //Load known peers
+            Utils.LoadPeerList();
             NodeList.Add(Player);
 
             //This is just for debugging
@@ -81,6 +82,13 @@ namespace C1X
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        protected override void UnloadContent()
+        {
+            Utils.SavePeerList();
+
+            base.UnloadContent();
         }
     }
 }

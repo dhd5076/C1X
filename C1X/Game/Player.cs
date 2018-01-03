@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
@@ -13,7 +14,7 @@ namespace C1X.Game
     {
         public static readonly float Speed = 200f;
 
-        public Player() : base() { }
+        public Player() : base(new TcpClient()) { }
         public Player(Texture2D texture2D, Vector2 position) : base(texture2D, position) { }
 
         public override void Update(GameTime gameTime)
@@ -26,7 +27,7 @@ namespace C1X.Game
             var left = keyboardState.IsKeyDown(Keys.A);
             var right = keyboardState.IsKeyDown(Keys.D);
 
-            if(up && down) C1XGame.PeerNetwork.Broadcast("Bit");
+            if(up && down) C1XGame.NodeNetwork.Broadcast("Bit");
 
             if (up && !down && this.Velocity.Y > -Speed) this.Velocity += new Vector2(0, -20);
             else if (down && !up && this.Velocity.Y < Speed) this.Velocity += new Vector2(0, 20);

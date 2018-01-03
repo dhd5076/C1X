@@ -6,18 +6,19 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using C1X.Game;
 
-namespace C1X.Network
+namespace C1X.Game
 {
-    public class PeerNetwork
+    public class NodeNetwork
     {
         public TcpListener TcpListener { get; private set; }
-        public List<Peer> ConnectedPeers { get; private set; }
+        public List<Node> ConnectedPeers { get; private set; }
 
-        public PeerNetwork()
+        public NodeNetwork()
         {
             TcpListener = new TcpListener(IPAddress.Any, 8090);
-            ConnectedPeers = new List<Peer>();
+            ConnectedPeers = new List<Node>();
             TcpListener.Start();
 
             var connectionHandlerThread = new Thread(IncomingConnectionHandler);
@@ -30,7 +31,7 @@ namespace C1X.Network
             {
                 var tcpClient = TcpListener.AcceptTcpClient();
                 Console.WriteLine("Client Connected!");
-                ConnectedPeers.Add(new Peer(tcpClient));
+                ConnectedPeers.Add(new Node(tcpClient));
             }
         }
 

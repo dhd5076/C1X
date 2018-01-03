@@ -7,25 +7,32 @@ using System.Threading.Tasks;
 
 namespace C1X.Crypto
 {
-    public class ECDsa
+    public class EcDsa
     {
-        public static ECDsaCng EcDsa;
-
-        public static void Init()
+        public static KeyPair GenKeyPair()
         {
-            EcDsa = new ECDsaCng();
-            EcDsa.HashAlgorithm = CngAlgorithm.Sha256;
+
+            var cngKeyCreationParameters = new CngKeyCreationParameters
+            {
+                ExportPolicy = CngExportPolicies.AllowPlaintextExport,
+                KeyUsage = CngKeyUsages.AllUsages,
+                KeyCreationOptions = CngKeyCreationOptions.OverwriteExistingKey
+            };
+
+            var cngKey = CngKey.Create(CngAlgorithm.ECDsaP256, "Address", cngKeyCreationParameters);
+
+            return new KeyPair(cngKey);
         }
 
-        public static ECDsaCng GenKeyPair()
+        public static string Sign(string message, CngKey cngKey)
         {
+            var data = Encoding.UTF8.GetBytes(message);
 
-            return EcDsa;
-        }
-
-        public static string Sign(string message, ECDsaCng Ec)
-        {
-            return 
+            using (var ecDsaCng = new ECDsaCng(cngKey))
+            {
+                ecDsaCng.HashAlgorithm = CngAlgorithm.Sha256;
+                return Encoding.ASCII.GetString(ecDsaCng.SignData(data));
+            }
         }
     }
 }

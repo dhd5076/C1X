@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
-using C1X.Network;
+using C1X.Crypto;
+using C1X.Game;
 
-namespace C1X.Utils
+namespace C1X
 {
-    internal class FileIO
+    internal class Utils
     {
-        private const string PeerListFile = "/Content/KnownPeers.lst";
+        private const string PeerListFile = "Content/KnownPeers.lst";
 
         public static void LoadPeerList()
         {
@@ -40,15 +41,15 @@ namespace C1X.Utils
             }
         }
 
-        public static void SavePeerList(PeerNetwork peerNetwork)
+        public static void SavePeerList()
         {
             try
             {
                 using (var streamWriter = new StreamWriter(PeerListFile))
                 {
-                    foreach(var peer in C1XGame.PeerNetwork.ConnectedPeers)
+                    foreach(var peer in C1XGame.NodeNetwork.ConnectedPeers)
                     {
-                        //StreamWriter.WriteLine(peer.TcpClient.);
+                        streamWriter.WriteLine("{0}|{1}|{2}", peer.IpAddress, KeyPair.ConvertToBase64(peer.KeyPair.PublicKey), DateTime.Now);
                     }
                 }
             }

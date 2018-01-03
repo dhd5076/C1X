@@ -12,7 +12,7 @@ namespace C1X
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             using (var game = new C1XGame())
                 game.Run();

@@ -6,6 +6,9 @@ Each node has unique network and cryptographic information.
 
 import socket
 
+from crypto import *
+
+print(hash_func("Hello"))
 
 class Node:
     """Defines the node type
@@ -28,7 +31,7 @@ class Node:
 
     """
 
-    def __init__(self, address, public_key, private_key = None):
+    def __init__(self, address, public_key, private_key=None):
         """Node object constructor
 
         Notes:
@@ -40,12 +43,12 @@ class Node:
             private_key (str): The node's private key.
 
         """
-        self.address = socket.
+        self.address = address
         self.public_key = public_key
         self.private_key = private_key
 
     @staticmethod
-    def create_new_user_node():
+    def create_new_user_node(i):
         """Creates a new user node
 
         The user node needs to generate a new key pair whenever it has been
@@ -54,8 +57,8 @@ class Node:
         Args:
             i (int): A number to use.
 
-        Returns
-            A new
+        Returns:
+            A new node with the given parameters.
 
         """
         pass

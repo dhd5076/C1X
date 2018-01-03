@@ -12,10 +12,9 @@ import socket
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-host = socket.gethostbyname()
+host = socket.gethostname()
 
 port = 8090
-
 
 def main():
     """Entry point to the program
@@ -24,8 +23,9 @@ def main():
     and connect to the network.
 
     """
-    server_socket.bind(host, port)
-    clientsocket,addr = server_socket.accept()
+    server_socket.bind((host, port))
+    server_socket.listen(5)
+    client_socket, addr = server_socket.accept()
     print(str(addr))
 
 

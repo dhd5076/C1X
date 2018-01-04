@@ -12,30 +12,25 @@ namespace C1X.Game
 {
     public class Player : Node
     {
-        public static readonly float Speed = 2f;
-        public static readonly float Acceleration = 0.02f;
+        public static readonly float Speed = 200f;
+        public static readonly float Acceleration = 10f;
 
         public Player(Socket socket) : base(socket, true) { }
 
         public override void Update(GameTime gameTime)
         {
-            var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
+            var diff = mouseState.Position.ToVector2() - Position;
+            var angle = (float)Math.Atan2((float)diff.Y, (float)diff.X);
 
-            #region Move with input
-            var up = keyboardState.IsKeyDown(Keys.W);
-            var down = keyboardState.IsKeyDown(Keys.S);
-            var left = keyboardState.IsKeyDown(Keys.A);
-            var right = keyboardState.IsKeyDown(Keys.D);
-
-            if(up && down) C1XGame.NodeNetwork.Broadcast("Bit");
-
-            if (up && !down && this.Velocity.Y > -Speed) this.Velocity += new Vector2(0, -Acceleration);
-            else if (down && !up && this.Velocity.Y < Speed) this.Velocity += new Vector2(0, Acceleration);
-
-
-            if (left && !right && this.Velocity.X > -Speed) this.Velocity += new Vector2(-Acceleration, 0f);
-            else if (right && !left && this.Velocity.X < Speed) this.Velocity += new Vector2(Acceleration, 0f);
-            #endregion
+            if ((Math.Abs(diff.X) > 1 || Math.Abs(diff.Y) > 1) && mouseState.RightButton == ButtonState.Pressed)
+            {
+                this.Velocity = new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle)) * new Vector2(2f, 2f);
+            }
+            else
+            {
+                this.Velocity = new Vector2(0,0);
+            }
 
             base.Update(gameTime);
         }

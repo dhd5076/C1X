@@ -13,8 +13,8 @@ namespace C1X
         public static C1XGame Instance { get; private set; }
         public static Viewport Viewport => Instance.GraphicsDevice.Viewport;
         public static GameTime GameTime;
-        public static List<Node> NodeList { get; private set; }
         public static NodeNetwork NodeNetwork { get; private set; }
+        public static Random Random { get; private set; }
 
         public Player Player { get; private set; }
 
@@ -32,8 +32,8 @@ namespace C1X
 
         protected override void Initialize()
         {
-            NodeList = new List<Node>();
             NodeNetwork = new NodeNetwork();
+            Random = new Random();
 
             base.Initialize();
         }
@@ -46,13 +46,7 @@ namespace C1X
             Node.Texture2D = Content.Load<Texture2D>("Sprites/Player");
 
             Utils.LoadPeerList();
-            NodeList.Add(Player);
-            
-            for(var i = 0; i < 100; i++)
-            {
-                var random = new Random();
-                NodeList.Add(Player);
-            }
+            NodeNetwork.ConnectedNodes.Add(Player);
         }
 
         protected override void Update(GameTime gameTime)
@@ -62,7 +56,7 @@ namespace C1X
                 Exit();
             }
 
-            foreach(var node in NodeList)
+            foreach(var node in NodeNetwork.ConnectedNodes)
             {
                 node.Update(gameTime);
             }
@@ -75,11 +69,11 @@ namespace C1X
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            foreach(var node in NodeList)
+            foreach(var node in NodeNetwork.ConnectedNodes)
             {
-                Console.Write(node);
                 _spriteBatch.Draw(Node.Texture2D, node.Position, Color.White);
             }
+            _spriteBatch.Draw(Node.Texture2D, Mouse.GetState().Position.ToVector2() + new Vector2(24, 24), null, Color.White, 0, new Vector2(16, 16), new Vector2(0.5f, 0.5f), SpriteEffects.None, 1);
             _spriteBatch.End();
 
             base.Draw(gameTime);

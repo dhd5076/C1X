@@ -47,7 +47,7 @@ namespace C1X
             {
                 using (var streamWriter = new StreamWriter(PeerListFile))
                 {
-                    foreach(var peer in C1XGame.NodeNetwork.ConnectedPeers)
+                    foreach(var peer in C1XGame.NodeNetwork.ConnectedNodes)
                     {
                         streamWriter.WriteLine("{0}|{1}|{2}", peer.IpAddress, KeyPair.ConvertToBase64(peer.KeyPair.PublicKey), DateTime.Now);
                     }

@@ -12,14 +12,16 @@ namespace C1X.Game
 {
     public class NodeNetwork
     {
-        public TcpListener TcpListener { get; private set; }
-        public List<Node> ConnectedPeers { get; private set; }
+        private readonly TcpListener _tcpListener;
+        public List<Node> ConnectedNodes { get; }
+        public bool ListenForIncomingConnections { get; private set; }
 
         public NodeNetwork()
         {
-            TcpListener = new TcpListener(IPAddress.Any, 8090);
-            ConnectedPeers = new List<Node>();
-            TcpListener.Start();
+            _tcpListener = new TcpListener(IPAddress.Any, 8090);
+            ConnectedNodes = new List<Node>();
+            _tcpListener.Start();
+            ListenForIncomingConnections = true;
 
             var connectionHandlerThread = new Thread(IncomingConnectionHandler);
             connectionHandlerThread.Start();
@@ -27,19 +29,28 @@ namespace C1X.Game
 
         private void IncomingConnectionHandler()
         {
-            while (true)
+            while (ListenForIncomingConnections)
             {
-                var tcpClient = TcpListener.AcceptTcpClient();
+                var tcpClient = _tcpListener.AcceptTcpClient();
                 Console.WriteLine("Client Connected!");
-                ConnectedPeers.Add(new Node(tcpClient.Client, false));
+                ConnectedNodes.Add(new Node(tcpClient.Client, false));
             }
         }
 
         public void Broadcast(string message)
         {
-            foreach (var peer in ConnectedPeers)
+            foreach (var peer in ConnectedNodes)
             {
                 peer.Send(message);
+            }
+        }
+
+        public void DisconnectNetwork()
+        {
+            ListenForIncomingConnections = false;
+            foreach (var node in ConnectedNodes)
+            {
+                node.Socket.Disconnect(false);
             }
         }
     }

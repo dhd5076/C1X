@@ -14,7 +14,7 @@ namespace C1X.Game
 {
     public class Node
     {
-        public static readonly float Friction = 0.001f;
+        public static readonly float Friction = 1f;
         public static Texture2D Texture2D { get; set; }
 
         public Vector2 Position { get; protected set; }
@@ -28,49 +28,51 @@ namespace C1X.Game
             this.Socket = socket;
             if (!isPlayer)
             {
+                this.Velocity = new Vector2((float)C1XGame.Random.NextDouble() * 10, (float)C1XGame.Random.NextDouble() * 10);
                 this.IpAddress = IPAddress.Parse(((IPEndPoint)socket.RemoteEndPoint).Address.ToString());
                 EstablishRelationship(socket);
             }
-            this.Position = new Vector2(0,0);
+            else
+            {
+                this.KeyPair = EcDsa.GenKeyPair();
+            }
+            this.Position = new Vector2(C1XGame.Random.Next(0, C1XGame.Viewport.Width), C1XGame.Random.Next(0, C1XGame.Viewport.Height));
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            this.Position += this.Velocity * (gameTime.ElapsedGameTime.Milliseconds / (1000f));
-            if (this.Velocity.X > 0) this.Velocity -= new Vector2(Friction, 0);
-            if (this.Velocity.X < 0) this.Velocity += new Vector2(Friction, 0);
-            if (this.Velocity.Y > 0) this.Velocity -= new Vector2(0, Friction);
-            if (this.Velocity.Y < 0) this.Velocity += new Vector2(0, Friction);
+            this.Position += this.Velocity;
+
+            if (!Socket.Connected && this.IpAddress != null) //TODO: Find a better way to check if we are player
+            {
+                this.Destroy();
+            }
         }
 
         public void EstablishRelationship(Socket socket)
         {
-            var success = false;
-
-            try
-            {
                 Send("Who?");
-                success = true;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Couldn't establish connection with peer.", e);
-            }
+                var response = Receive(1024);
+                Send(KeyPair.ConvertToBase64(C1XGame.Instance.Player.KeyPair.PrivateKey));
+        }
 
-            if (!success)
-            {
-                Destroy();
-            }
+        public string Receive(int length)
+        {
+            Socket.ReceiveTimeout = 4000;
+            var buffer = new byte[length];
+            Socket.Receive(buffer);
+            return Encoding.ASCII.GetString(buffer);
         }
 
         public void Send(string message)
         {
-            if (Socket.Connected) Socket.Send(Encoding.ASCII.GetBytes(message));
+            if (Socket.Connected) Socket.Send(Encoding.ASCII.GetBytes(message + "\r\n"));
         }
 
         public void Destroy()
         {
-            C1XGame.NodeNetwork.ConnectedPeers.Remove(this);
+            //TODO: THIS IS TERRIBLE!
+            this.Position = new Vector2(-128, -128);
         }
 
         protected void AddForce(Vector2 forceVector)

@@ -34,11 +34,5 @@ namespace C1X.Crypto
                 return Encoding.ASCII.GetString(ecDsaCng.SignData(data));
             }
         }
-
-        public static string HashString(string message)
-        {
-            SHA256 hash = SHA256.Create();
-            hash.
-        }
     }
 }
